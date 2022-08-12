@@ -1,0 +1,68 @@
+
+
+resource "aws_instance" "Bastion_Host" {
+  ami           = data.aws_ami.Bastion_Host.id
+  instance_type = "t2.micro"
+
+  #VPC
+  vpc_security_group_ids = [aws_security_group.bastion_host_server_sg.id] #VPC
+  #Keypair
+  key_name = "bastion_host_key"
+  #Subnet_id
+  subnet_id = data.aws_subnet.public_a.id
+
+  tags = {
+    Name = "Bastion_host"
+  }
+
+}
+
+
+
+resource "aws_instance" "Kibana_server" {
+  ami           = data.aws_ami.Kibana_server.id
+  instance_type = "t2.large"
+  subnet_id = data.aws_subnet.public_a.id
+
+
+  tags = {
+    Name = "Kibana_server"
+  }
+}
+
+
+
+resource "aws_instance" "Es_server" {
+  ami           = data.aws_ami.Es_server.id
+  instance_type = "t2.large"
+  subnet_id = data.aws_subnet.private_a.id
+
+
+  tags = {
+    Name = "Es_server"
+  }
+}
+
+
+
+resource "aws_instance" "Demo" {
+  count = 3
+  ami           = data.aws_ami.Demo.id
+  instance_type = "t2.large"
+  subnet_id = data.aws_subnet.private_b.id
+  tags = {
+    Name = "Demo_Server-${count.index}"
+  }
+}
+
+
+
+resource "aws_instance" "Logstash_server" {
+  ami           = data.aws_ami.Logstash_server.id
+  instance_type = "t2.large"
+  subnet_id = data.aws_subnet.private_a.id
+  tags = {
+    Name = "Logstash Server"
+  }
+}
+
