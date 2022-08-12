@@ -88,3 +88,28 @@ data "aws_ami" "Logstash_server" {
 
   owners = ["099720109477"] # Canonical
 }
+
+data "aws_subnet" "public_a" {
+    filter {
+    name   = "tag:Name"
+    values = ["Public_Subnet_a"]
+  }
+}
+data "aws_subnet" "private_a" {
+    filter {
+    name   = "tag:Name"
+    values = ["Private_Subnet_a"]
+  }
+}
+data "aws_subnet" "private_b" {
+    filter {
+    name   = "tag:Name"
+    values = ["Private_Subnet_b"]
+  }
+}
+data "aws_subnet" "private_c" {
+    filter {
+    name   = "tag:Name"
+    values = ["Private_Subnet_c"]
+  }
+}

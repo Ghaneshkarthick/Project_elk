@@ -33,6 +33,9 @@ resource "aws_security_group" "Demo_server_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
+  depends_on = [
+    aws_security_group.Elasticsearch_sg
+  ]
 
   tags = {
     Name = "Demo server sg"
@@ -102,7 +105,9 @@ resource "aws_security_group" "Kibana_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-
+  depends_on = [
+    aws_security_group.Elasticsearch_sg
+  ]
   tags = {
     Name = "bastion-host-server"
   }
@@ -125,7 +130,7 @@ resource "aws_security_group" "Elasticsearch_sg" {
     from_port   = 5601
     to_port     = 5601
     protocol    = "tcp"
-    security_groups = [aws_security_group.Kibana_sg.id]
+    #security_groups = [aws_security_group.Kibana_sg.id]
     
   }
   ingress {
@@ -133,7 +138,8 @@ resource "aws_security_group" "Elasticsearch_sg" {
     from_port   = 9600
     to_port     = 9600
     protocol    = "tcp"
-    security_groups = [aws_security_group.logstash_sg.id]
+    cidr_blocks = [ "0.0.0.0/0" ]
+    #security_groups = [aws_security_group.logstash_sg.id]
     
   }
 
@@ -178,7 +184,9 @@ resource "aws_security_group" "logstash_sg" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-
+  depends_on = [
+    aws_security_group.Elasticsearch_sg
+  ]
   tags = {
     Name = "bastion-host-server"
   }
