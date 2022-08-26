@@ -5,19 +5,12 @@ resource "aws_security_group" "Demo_server_sg" {
 
   ingress {
     description      = "Rest Api call"
-    from_port        = 9200
-    to_port          = 9200
+    from_port        = 5044
+    to_port          = 5044
     protocol         = "tcp"
     security_groups = [aws_security_group.Elasticsearch_sg.id]
   }
-  ingress {
-    description      = "Node communication"
-    from_port        = 9300
-    to_port          = 9300
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-  
+   
   ingress {
     description      = "SSH from Bastion host"
     from_port        = 22
@@ -41,6 +34,9 @@ resource "aws_security_group" "Demo_server_sg" {
     Name = "Demo server sg"
   }
 }
+
+
+
 #Security group for Bastio Host server
 resource "aws_security_group" "bastion_host_server_sg" {
   name        = "bastion-host-server"
@@ -68,6 +64,9 @@ resource "aws_security_group" "bastion_host_server_sg" {
     Name = "bastion-host-server"
   }
 }
+
+
+
 
 resource "aws_security_group" "Kibana_sg" {
   name        = "Kibana_sg"
@@ -97,6 +96,14 @@ resource "aws_security_group" "Kibana_sg" {
     security_groups = [aws_security_group.Elasticsearch_sg.id]
     
   }
+  ingress {
+    description = "Kibana communication port"
+    from_port   = 5601
+    to_port     = 5601
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    
+  }
 
   egress {
     from_port        = 0
@@ -112,6 +119,9 @@ resource "aws_security_group" "Kibana_sg" {
     Name = "bastion-host-server"
   }
 }
+
+
+
 resource "aws_security_group" "Elasticsearch_sg" {
   name        = "Elasticsearch_sg"
   description = "Allow connection to Elasticsearch_sg."
@@ -126,23 +136,14 @@ resource "aws_security_group" "Elasticsearch_sg" {
     
   }
   ingress {
-    description = "Allow communication from kibana"
-    from_port   = 5601
-    to_port     = 5601
+    description = "Allow port 9200"
+    from_port   = 9200
+    to_port     = 9200
     protocol    = "tcp"
-    #security_groups = [aws_security_group.Kibana_sg.id]
+    security_groups = [aws_security_group.bastion_host_server_sg.id]
     
   }
-  ingress {
-    description = "Allow communication from Logstash"
-    from_port   = 9600
-    to_port     = 9600
-    protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
-    #security_groups = [aws_security_group.logstash_sg.id]
-    
-  }
-
+  
   egress {
     from_port        = 0
     to_port          = 0
@@ -155,6 +156,9 @@ resource "aws_security_group" "Elasticsearch_sg" {
     Name = "bastion-host-server"
   }
 }
+
+
+
 resource "aws_security_group" "logstash_sg" {
   name        = "Logstash_server"
   description = "Allow connection for Logstash server."
@@ -170,8 +174,8 @@ resource "aws_security_group" "logstash_sg" {
   }
   ingress {
     description = "Allow communication from Elastic search"
-    from_port   = 9600
-    to_port     = 9600
+    from_port   = 5044
+    to_port     = 5044
     protocol    = "tcp"
     security_groups = [aws_security_group.Elasticsearch_sg.id]
     

@@ -1,2 +1,2 @@
-instance_type = "t2.large"
+instance_type = "m4.large"
 key_name = "ELK_Key"
