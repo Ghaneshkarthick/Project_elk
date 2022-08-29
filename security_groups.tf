@@ -4,18 +4,18 @@ resource "aws_security_group" "Demo_server_sg" {
   vpc_id      = data.aws_vpc.Elk_vpc.id
 
   ingress {
-    description      = "Rest Api call"
-    from_port        = 5044
-    to_port          = 5044
-    protocol         = "tcp"
+    description     = "Rest Api call"
+    from_port       = 5044
+    to_port         = 5044
+    protocol        = "tcp"
     security_groups = [aws_security_group.Elasticsearch_sg.id]
   }
-   
+
   ingress {
-    description      = "SSH from Bastion host"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
+    description     = "SSH from Bastion host"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.bastion_host_server_sg.id]
   }
 
@@ -49,7 +49,7 @@ resource "aws_security_group" "bastion_host_server_sg" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["103.218.112.10/32"]
-    
+
   }
 
   egress {
@@ -74,11 +74,11 @@ resource "aws_security_group" "Kibana_sg" {
   vpc_id      = data.aws_vpc.Elk_vpc.id
 
   ingress {
-    description = "Allow port 22"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    security_groups = [aws_security_group.bastion_host_server_sg.id] 
+    description     = "Allow port 22"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion_host_server_sg.id]
   }
   ingress {
     description = "HTTP connection to Kibana"
@@ -86,15 +86,15 @@ resource "aws_security_group" "Kibana_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["103.218.112.10/32"]
-    
+
   }
   ingress {
-    description = "Allow communication from elastic search"
-    from_port   = 9200
-    to_port     = 9200
-    protocol    = "tcp"
+    description     = "Allow communication from elastic search"
+    from_port       = 9200
+    to_port         = 9200
+    protocol        = "tcp"
     security_groups = [aws_security_group.Elasticsearch_sg.id]
-    
+
   }
   ingress {
     description = "Kibana communication port"
@@ -102,7 +102,7 @@ resource "aws_security_group" "Kibana_sg" {
     to_port     = 5601
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    
+
   }
 
   egress {
@@ -128,22 +128,22 @@ resource "aws_security_group" "Elasticsearch_sg" {
   vpc_id      = data.aws_vpc.Elk_vpc.id
 
   ingress {
-    description = "Allow port 22"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    description     = "Allow port 22"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.bastion_host_server_sg.id]
-    
+
   }
   ingress {
-    description = "Allow port 9200"
-    from_port   = 9200
-    to_port     = 9200
-    protocol    = "tcp"
+    description     = "Allow port 9200"
+    from_port       = 9200
+    to_port         = 9200
+    protocol        = "tcp"
     security_groups = [aws_security_group.bastion_host_server_sg.id]
-    
+
   }
-  
+
   egress {
     from_port        = 0
     to_port          = 0
@@ -165,20 +165,20 @@ resource "aws_security_group" "logstash_sg" {
   vpc_id      = data.aws_vpc.Elk_vpc.id
 
   ingress {
-    description = "Allow port 22"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    description     = "Allow port 22"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.bastion_host_server_sg.id]
-    
+
   }
   ingress {
-    description = "Allow communication from Elastic search"
-    from_port   = 5044
-    to_port     = 5044
-    protocol    = "tcp"
+    description     = "Allow communication from Elastic search"
+    from_port       = 5044
+    to_port         = 5044
+    protocol        = "tcp"
     security_groups = [aws_security_group.Elasticsearch_sg.id]
-    
+
   }
 
   egress {

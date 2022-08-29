@@ -1,5 +1,5 @@
 data "aws_vpc" "Elk_vpc" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = ["lab_vpc"]
   }
@@ -58,7 +58,7 @@ data "aws_ami" "Es_server" {
 
 data "aws_ami" "Demo_Server" {
   most_recent = true
-  
+
 
   filter {
     name   = "name"
@@ -90,25 +90,25 @@ data "aws_ami" "Logstash_server" {
 }
 
 data "aws_subnet" "public_a" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = ["Public_Subnet_a"]
   }
 }
 data "aws_subnet" "private_a" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = ["Private_Subnet_a"]
   }
 }
 data "aws_subnet" "private_b" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = ["Private_Subnet_b"]
   }
 }
 data "aws_subnet" "private_c" {
-    filter {
+  filter {
     name   = "tag:Name"
     values = ["Private_Subnet_c"]
   }
