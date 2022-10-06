@@ -1,0 +1,13 @@
+---
+
+repo_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+apt_url: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+
+Es_config:
+  cluster.name: "elk"
+  network.host: "192.168.4.164"
+  http.port: "9200"
+  discovery.type: single-node
+
+Kibana_config:
+  kibana_server_port: 5601

@@ -1,2 +1,2 @@
 instance_type = "m4.large"
-key_name      = "ELK_Key"
+key_name      = "Elk_key1"

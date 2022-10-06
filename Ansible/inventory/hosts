@@ -1,0 +1,10 @@
+[Elasticsearch]
+192.168.4.164
+
+[Logstash]
+192.168.4.163
+
+[Kibana]
+
+
+[Demos]

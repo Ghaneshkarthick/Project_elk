@@ -7,9 +7,11 @@ resource "aws_instance" "Bastion_Host" {
   #VPC
   vpc_security_group_ids = [aws_security_group.bastion_host_server_sg.id] #VPC
   #Keypair
-  key_name = "ELK_Key"
+  key_name = var.key_name
   #Subnet_id
   subnet_id = data.aws_subnet.public_a.id
+
+  
 
   tags = {
     Name = "Bastion_host"

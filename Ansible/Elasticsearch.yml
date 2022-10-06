@@ -1,0 +1,66 @@
+- name: Elasticsearch
+  hosts: Elasticsearch
+  become: true
+  tasks: 
+
+    - name: Performing Apt-Update
+      apt:
+        update_cache: yes
+          
+    - name: Install apt-transport-https to support https APT downloads
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: Add Elasticsearch repository key
+      apt_key:
+        url: '{{ repo_key }}'
+        state: present
+
+    - name: Add elasticsearch repository
+      apt_repository:
+        repo: '{{ item.repo }}'
+        state: '{{ item.state }}'
+      with_items:
+        - { repo: "{{ apt_url }}", state: "present" }
+
+    - name: Install elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Configuring Elasticsearch
+      become_user: root
+      lineinfile: 
+        path: /etc/elasticsearch/elasticsearch.yml
+        regexp: '{{ item.key }}:.*$'
+        line: '{{ item.key }}: {{ item.value }}'
+      with_dict: "{{ Es_config }}"
+
+    - name: Adding discovery type
+      lineinfile: 
+        path: /etc/elasticsearch/elasticsearch.yml
+        insertafter: '"discovery.seed_hosts: ["host1", "host2"]"'
+        line: "discovery.type: single-node"
+
+    - name: Restarting Elasticsearch
+      systemd:
+        state: restarted
+        name: elasticsearch.service
+
+    - name: Install python pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install python setuptools
+      apt:
+        name: python3-setuptools
+        state: present
+
+    - name: Start elasticsearch
+      systemd:
+        name: elasticsearch
+        daemon_reload: yes
+        state: started
+        enabled: yes
