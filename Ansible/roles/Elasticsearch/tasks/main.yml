@@ -1,0 +1,28 @@
+
+
+    - name: Installing elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Configuring Elasticsearch
+      lineinfile: 
+        path: /etc/elasticsearch/elasticsearch.yml
+        regexp: '{{ item.key }}:.*$'
+        line: '{{ item.key }}: {{ item.value }}'
+      with_dict: "{{ Es_config }}"
+
+    - name: Adding discovery type
+      lineinfile: 
+        path: /etc/elasticsearch/elasticsearch.yml
+        insertafter: '"discovery.seed_hosts: ["host1", "host2"]"'
+        line: "discovery.type: single-node"
+      notify: 
+        - Restart elasticsearch
+
+    - name: Start elasticsearch
+      systemd:
+        name: elasticsearch
+        daemon_reload: yes
+        state: started
+        enabled: yes

@@ -1,0 +1,6 @@
+---
+
+    - name: Restart Kibana
+      systemd:
+        state: restarted
+        name: kibana.service

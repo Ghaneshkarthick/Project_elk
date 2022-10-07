@@ -1,0 +1,30 @@
+---
+  - name: Dependencies
+    hosts: all
+    become: true
+    roles:
+      - { role: Dependencies }
+
+  - name: Elasticsearch
+    hosts: Elasticsearch
+    become: true
+    roles:
+      - { role: Elasticsearch }
+  
+  - name: Logstash
+    hosts: Logstash
+    become: true
+    roles:
+      - { role: Logstash }
+
+  - name: Kibana
+    hosts: Kibana
+    become: true
+    roles:
+      - { role: Kibana }
+
+  - name: Filebeat
+    hosts: Demos
+    become: true
+    roles:
+      - { role: Filebeat }

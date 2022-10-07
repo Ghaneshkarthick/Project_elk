@@ -1,0 +1,21 @@
+
+    - name: Install Kibana
+      apt:
+        name: kibana
+        state: present
+
+    - name: Configuring Kibana
+      lineinfile: 
+        path: /etc/kibana/kibana.yml
+        regexp: '{{ item.key }}:.*$'
+        line: '{{ item.key }}: {{ item.value }}'
+      with_dict: "{{ Kibana_config }}"
+      notify: 
+        - Restart Kibana
+
+    - name: Starting Kibana
+      systemd:
+        name: kibana
+        daemon_reload: yes
+        state: started
+        enabled: yes

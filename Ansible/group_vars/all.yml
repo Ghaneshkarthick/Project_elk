@@ -9,5 +9,20 @@ Es_config:
   http.port: "9200"
   discovery.type: single-node
 
+Ls_config:
+  node.name: Logstash
+  api.http.host: "192.168.4.163"
+  
 Kibana_config:
-  kibana_server_port: 5601
+  server.port: 5601
+  server.host: "192.168.1.174"
+  elasticsearch.hosts: ["http://192.168.4.164:9200"]
+
+filebeat_config: 
+  output.logstash
+      hosts: ["192.168.4.163:5044"]
+
+filebeat_config_2      
+  output.elasticsearch:
+  Array of hosts to connect to.
+  hosts: ["localhost:9200"]

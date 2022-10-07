@@ -1,0 +1,27 @@
+
+    - name: Installing Logstash
+      apt:
+        name: logstash
+        state: present
+
+    - name: Configuring Logstash
+      lineinfile: 
+        path: /etc/logstash/logstash.yml
+        regexp: '{{ item.key }}:.*$'
+        line: '{{ item.key }}: {{ item.value }}'
+      with_dict: "{{ Ls_config }}"
+
+    - name: Adding discovery type
+      replace: 
+        path: /etc/logstash/logstash-sample.conf
+        regexp: "hosts => ["http://localhost:9200"]"
+        line: "hosts => ["http://192.168.4.164:9200"]"
+      notify: 
+        - Restart logstash
+
+    - name: Start Logstash
+      systemd:
+        name: logstash
+        daemon_reload: yes
+        state: started
+        enabled: yes

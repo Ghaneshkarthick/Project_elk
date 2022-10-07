@@ -1,0 +1,28 @@
+
+    - name: Install Filebeat
+      apt:
+        name: filebeat
+        state: present
+
+    - name: Configuring Filebeat
+      lineinfile: 
+        path: /etc/filebeat/filebeat.yml
+        regexp: '^#{{ item.key }}.*'
+        line: '{{ item.key }}'
+      with_dict: "{{ filebeat_config }}"
+      notify: 
+        - Restart filebeat
+
+    - name: Configuring Filebeat
+      replace: 
+        path: /etc/filebeat/filebeat.yml
+        regex: '^{{ item.key }}'
+        replace: '#{{ item.key }}'
+      with_dict: "{{ filebeat_config_2 }}"
+
+    - name: Enabling filebeat
+      systemd:
+        name: filebeat
+        daemon_reload: yes
+        state: started
+        enabled: yes

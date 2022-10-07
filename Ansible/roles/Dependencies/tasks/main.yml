@@ -1,0 +1,30 @@
+    - name: Performing Apt-Update
+      apt:
+        update_cache: yes
+          
+    - name: Install apt-transport-https to support https APT downloads
+      apt:
+        name: apt-transport-https
+        state: present
+
+    - name: Add Elastisearch repository key
+      apt_key:
+        url: '{{ repo_key }}'
+        state: present
+
+    - name: Add Elastsearch repository
+      apt_repository:
+        repo: '{{ item.repo }}'
+        state: '{{ item.state }}'
+      with_items:
+        - { repo: "{{ apt_url }}", state: "present" }
+
+    - name: Install python pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install python setuptools
+      apt:
+        name: python3-setuptools
+        state: present
